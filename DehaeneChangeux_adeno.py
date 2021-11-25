@@ -419,7 +419,7 @@ def WCST_test(nb_test, path):
         decaythreshold = a_decay_threshold
         growth = a_growth
         accumulate = a_accumulate
-        decayfactor = a_decayfactor
+        decayfactor = a_decay_factor
         input = a_input
         store_prev = a_store
         store = 0
@@ -450,6 +450,7 @@ def WCST_test(nb_test, path):
     confidence_activity = 0.
     reflexion_activity = 0.
     inhibition_activity = 0.
+    adeno_density = 0.
 
     #LONG TERM COMPONENTS INITIALISATION
     LTinput_to_mem = np.eye(4,4)*3
@@ -536,6 +537,7 @@ def WCST_test(nb_test, path):
     trial_his = []
     ptrial = []
     ntrial = []
+    adeno_history = []
     
     #INITIALISATION
     rule = 0
@@ -598,7 +600,7 @@ def WCST_test(nb_test, path):
             
         confidence_activity = confidence_activation(error_activity, STerr_to_conf, LTerr_to_conf)
         inhibition_activity = inhibition_activation_adeno(inhibition_activity, LTinhib, STinhib, output_activity, LTout_to_inhib, STout_to_inhib, Tinhib, adeno_density, LTadeno, STadeno)
-        adeno_density = leaky_integrator(inhibition_activity, adeno_density, li_decay, li_growth, li_accumulate, li_threshold)
+        adeno_density = leaky_integrator(inhibition_activity, adeno_density, li_threshold, li_decay, li_growth, li_accumulate)
         
         reflexion_activity = reflexion_activation(reflexion_activity, LTref, STref, confidence_activity, STconf_to_ref, LTconf_to_ref, inhibition_activity, LTinhib_to_ref, STinhib_to_ref, Tref)
         memory_activity = memory_activation(memory_activity, v_data, LTinput_to_mem, LTmemory, STinput_to_mem, STmemory, Tmem_int) 
@@ -747,7 +749,7 @@ def WCST_test(nb_test, path):
     
     #ACTIVITIES HISTORY PRINTING
     plot_x = 4
-    plot_y = 4
+    plot_y = 5
     plt.subplot(plot_x, plot_y, 1)
     plt.plot(loop, ptrial, "#75f33a", loop, ntrial, "#75063a" , loop, r1_act_history,  'b-' , loop, r2_act_history, 'g-', loop, r3_act_history,  'r-')
     plt.title("Rule activities")
@@ -807,8 +809,12 @@ def WCST_test(nb_test, path):
     plt.subplot(plot_x, plot_y, 15)
     plt.plot(loop, trial_his, "k:",loop, inhib)
     plt.title("Inhibition")
+
+    plt.subplot(plot_x, plot_y, 16)
+    plt.plot(loop, adeno_history)
+    plt.title("Adenosine")
     
-    filename= str(path) + "/DehaeneNNPlot" + str(nb_test) + ".png"
+    filename= str(path) + "/DehaeneNNPlot_adeno" + str(nb_test) + ".png"
     plt.savefig(filename)
     plt.close()
     
