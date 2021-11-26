@@ -28,6 +28,8 @@ np.set_printoptions(threshold=np.inf)
 np.set_printoptions(precision=3)
 np.set_printoptions(suppress=True)
 np.set_printoptions(linewidth=np.inf)
+np.random.seed(10)
+
 from WCST import *
 
 def WCST_test(nb_test, path):
@@ -748,8 +750,9 @@ def WCST_test(nb_test, path):
     #print("Temps d execution : %s secondes ---" % (end - start))
     
     #ACTIVITIES HISTORY PRINTING
-    plot_x = 4
-    plot_y = 5
+    
+    plot_x = 16
+    plot_y = 1
     plt.subplot(plot_x, plot_y, 1)
     plt.plot(loop, ptrial, "#75f33a", loop, ntrial, "#75063a" , loop, r1_act_history,  'b-' , loop, r2_act_history, 'g-', loop, r3_act_history,  'r-')
     plt.title("Rule activities")
@@ -815,8 +818,12 @@ def WCST_test(nb_test, path):
     plt.title("Adenosine")
     
     filename= str(path) + "/DehaeneNNPlot_adeno" + str(nb_test) + ".png"
-    plt.savefig(filename)
-    plt.close()
+    # plt.rcParams["figure.figsize"] = (40,10)
+    # plt.savefig(filename, dpi=100)
+    # plt.close()
+    fig = plt.gcf()
+    fig.set_size_inches(10.5, 20.5)
+    fig.savefig(filename, dpi=100)
     
     #CLEAR COMPUTER MEMORY
     trials = None
@@ -835,3 +842,12 @@ except OSError:
 else:
     print ("Successfully created the directory %s " % path)
 nb_trials, t_crit_mean , single_trial_lr, persev_percent, nbTS, test_time = WCST_test(nb_test, path)
+
+# print("Speed of learning: " + str(speed_lr_mean))
+print("Single-trial learning: " + str(single_trial_lr))
+print("Perseverations: " + str(persev_percent))
+print("nbTS mean: " + str(nbTS))
+print("nb trials mean: " + str(nb_trials))
+print("Mean time: " + str(test_time))
+print()
+
