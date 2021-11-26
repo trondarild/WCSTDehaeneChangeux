@@ -762,3 +762,10 @@ except OSError:
 else:
     print ("Successfully created the directory %s " % path)
 nb_trials, t_crit_mean , single_trial_lr, persev_percent, nbTS, test_time = WCST_test(nb_test, path)
+
+print("Single-trial learning: " + str(single_trial_lr))
+print("Perseverations: " + str(persev_percent))
+print("nbTS mean: " + str(nbTS))
+print("nb trials mean: " + str(nb_trials))
+print("Mean time: " + str(test_time))
+print()
